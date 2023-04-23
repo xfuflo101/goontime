@@ -1,7 +1,6 @@
 # Priority queue and on time delivery queue.
 
-For Go 1.18+ (with generics)
-Based on [heap](https://pkg.go.dev/container/heap) and [delayqueue](https://pkg.go.dev/github.com/golearnku/delayqueue).
+For Go 1.18+ (with generics). Based on [heap](https://pkg.go.dev/container/heap) and [delayqueue](https://pkg.go.dev/github.com/golearnku/delayqueue).
 
 ---
 
@@ -52,6 +51,73 @@ func main() {
 	for !pq.Empty() {
 		fmt.Printf("%v", pq.Pop())
 	}
+}
+
+```
+
+---
+
+## On Time delivery queue
+
+OnTimeQueue. Based on PriorityQueueE2E. Ready for concurrent programming.
+
+### Example
+
+```go
+
+import (
+	"context"
+	"fmt"
+	"sync"
+	"time"
+
+	got "github.com/xfuflo101/goontime"
+)
+
+func main() {
+
+	var wg sync.WaitGroup
+	ctx, ctxCancel := context.WithCancel(context.Background())
+
+	onTimeQueue := got.NewOnTimeQueue[string](10)
+	defer onTimeQueue.Shutdown()
+
+	onTimeChan := got.CreateOnTimeQueueChannel(ctx, &wg, onTimeQueue)
+	// this channel will close writer by ctx cancel
+
+	start := time.Now()
+
+	var resultStr string
+
+	wg.Add(1)
+	go func() {
+		// reader
+		defer wg.Done()
+
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case str := <-onTimeChan:
+				resultStr += fmt.Sprintf("; [%v : %v]", str, time.Now().Sub(start).Milliseconds()/100)
+			}
+		}
+	}()
+
+	onTimeQueue.Add("10", time.Duration(10*time.Second))
+	onTimeQueue.Add("8", time.Duration(8*time.Second))
+	onTimeQueue.Add("3", time.Duration(3*time.Second))
+	onTimeQueue.Add("2", time.Duration(2*time.Second))
+	onTimeQueue.Add("8_2", time.Duration(8*time.Second))
+	onTimeQueue.Add("1", time.Duration(1*time.Second))
+
+	time.Sleep(11 * time.Second)
+
+	ctxCancel()
+
+	wg.Wait()
+
+	fmt.Printf("Result: [%v]\n", resultStr)
 }
 
 ```
