@@ -83,7 +83,7 @@ func main() {
 	defer onTimeQueue.Shutdown()
 
 	onTimeChan := got.CreateOnTimeQueueChannel(ctx, &wg, onTimeQueue)
-	// this channel will close writer by ctx cancel
+	// this channel will be closed by writer on ctx cancel
 
 	start := time.Now()
 
