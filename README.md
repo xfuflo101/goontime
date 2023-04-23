@@ -18,9 +18,9 @@ Both PriorityQueue and PriorityQueueE2E are not concurrent programming safe.
 ```go
 
 import (
-    "fmt"
+	"fmt"
 
-    got "github.com/xfuflo101/goontime"
+	got "github.com/xfuflo101/goontime"
 )
 
 type Elem struct {
@@ -50,7 +50,7 @@ func main() {
 	pq.Push(NewElem(8, "8"))
 
 	for !pq.Empty() {
-        fmt.Printf("%v", pq.Pop())
+		fmt.Printf("%v", pq.Pop())
 	}
 }
 
