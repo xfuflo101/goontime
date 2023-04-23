@@ -1,9 +1,7 @@
 # Priority queue and on time delivery queue.
 
 For Go 1.18+ (with generics)
-Based on
-[heap](https://pkg.go.dev/container/heap).
-[delayqueue](https://pkg.go.dev/github.com/golearnku/delayqueue).
+Based on [heap](https://pkg.go.dev/container/heap) and [delayqueue](https://pkg.go.dev/github.com/golearnku/delayqueue).
 
 ---
 
@@ -21,7 +19,7 @@ Both PriorityQueue and PriorityQueueE2E are not concurrent programming safe.
 
 import (
     "fmt"
-    
+
     got "github.com/xfuflo101/goontime"
 )
 
