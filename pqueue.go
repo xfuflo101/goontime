@@ -163,7 +163,7 @@ func (self *priorityQueueImpl[T]) Pop() any {
 }
 
 func (self *priorityQueueImpl[T]) Peek() T {
-	return self.pq[len(self.pq)-1]
+	return self.pq[0]
 }
 
 ////////////////////////////////////////////////////////
